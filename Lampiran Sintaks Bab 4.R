@@ -1,4 +1,4 @@
-#---- Re-Run Data Skripsi ----
+#---- Run Data Skripsi ----
 
 #---- Import Data -----
 library(readxl)
@@ -7,10 +7,8 @@ pisa18_IDN <- read_excel("E:/Documents/UNJ/SKRIPSI/SPS/PISA/Data/
                          Questionnare Data/Indo/PISA2018_StuQue_IDN.xlsx")
 
 # list variabel pisa18 (dari fungsi pisa.var.label(), ngebaca file sav
-# 
 library(intsvy)
 pisa18_varlist
-
 datarerun <- pisa18_IDN # 12098 obs
 PVREAD <- pisa18_IDN[,464:473] #10 Plausible Value for Read Score 
 readscore <- rowMeans(PVREAD)
@@ -1049,6 +1047,7 @@ error2 <- y.vec - y.new
 #---- Asumsi Klasik ----
 #normalitas
 ks.test(error, "pnorm", mean(error), sd(error)) #jika p-value > 0.05 maka data normal
+
 #heterokedasitas
 library(lmtest)
 #gabungin y.new sama variable dummy (x)
@@ -1064,7 +1063,6 @@ bptest(y.new~.,data=dataxy_new2)
 hmctest(y.new~.,data=dataxy_new2,plot = T)
 
 #Gunakan model yang hanya berisi variabel X yang signifikan saja
-
 #white test
 Ru2<- summary(lm(error^2 ~ y.new + I(y.new^2)))$r.squared
 LM <- nrow(dataxy_new)*Ru2
@@ -1072,22 +1070,20 @@ whitetest_p.value <- 1-pchisq(LM, 2)
 whitetest_p.value
 
 #---- Plot/Grafik ----
-# Par Transparant
-par(bg=NA)
-
 # Histogram
 hist(datarerunfix$readscore, 
      main = "Histogram of Indonesian Student 
        PISA 2018 Readscore",
      xlab = "Readscore PISA")
+
 # Histogram with Lines
 hist(datarerunfix$readscore, prob = T,
      main = "Histogram of Indonesian Student 
        PISA 2018 Readscore",
      xlab = "Readscore PISA", 
      col = "#98d0df", border = "#3592ab")
-
 lines(density(datarerunfix$readscore), col = 2, lwd = 3)
+
 # Boxplot
 boxplot(datarerunfix$readscore,
         main = "Boxplot of Indonesian Student
